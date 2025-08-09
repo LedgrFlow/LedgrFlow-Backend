@@ -23,12 +23,7 @@ def create_app(config_class=Config):
     if app.debug:
         CORS(app)
     else:
-        CORS(
-            app,
-            resources={
-                r"/*": {"origins": ["https://tuapp.com", "http://localhost:5173"]}
-            },
-        )
+        CORS(app, resources={r"/*": {"origins": app.config["CORS_ORIGINS"]}})
 
     # Register blueprints
     from routes.main import main_bp
