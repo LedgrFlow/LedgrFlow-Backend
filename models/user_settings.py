@@ -15,6 +15,7 @@ class UserSettings(db.Model):
 
     # Theme settings
     app_theme = Column(String(20), default="dark")  # dark, light, system
+    app_glass_mode = Column(Boolean, default=False)  # true, false
     editor_theme = Column(String(50), default="vs-dark")  # vscode themes
 
     # Account structure configuration

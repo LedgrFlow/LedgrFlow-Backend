@@ -11,6 +11,7 @@ class UserSettingsSchema(Schema):
     app_theme = fields.Str(
         validate=validate.OneOf(["dark", "light", "system"]), default="light"
     )
+    app_glass_mode = fields.Bool(default=False)
     editor_theme = fields.Str(default="vs-dark")
 
     # Account structure configuration
@@ -59,6 +60,7 @@ class UserSettingsUpdateSchema(Schema):
     app_theme = fields.Str(
         validate=validate.OneOf(["dark", "light", "system"]), missing=None
     )
+    app_glass_mode = fields.Bool(missing=None)
     editor_theme = fields.Str(missing=None)
     parent_accounts = fields.Dict(keys=fields.Str(), values=fields.Str(), missing=None)
     language = fields.Str(validate=validate.OneOf(["en", "es"]), missing=None)
