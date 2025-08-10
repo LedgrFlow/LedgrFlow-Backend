@@ -112,6 +112,7 @@ def analyze_ledger_parser(file_id):
 
         (
             _,
+            parser_document,
             transactions,
             accounts,
             accounts_advance,
@@ -137,6 +138,7 @@ def analyze_ledger_parser(file_id):
                         "success": True,
                         "data": {
                             "transactions_resolved": transactions_resolved,
+                            "ledger_document": parser_document,
                             "transactions": transactions,
                             "accounts": accounts,
                             "accounts_advance": accounts_advance,

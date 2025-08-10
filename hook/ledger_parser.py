@@ -39,6 +39,7 @@ def parse_ledger(
     """Parsea un archivo de ledger y devuelve un diccionario con los datos o None si fallan."""
 
     ledger = None
+    ledger_document = None
     transactions = None
     accounts = None
     accounts_advance = None
@@ -66,6 +67,11 @@ def parse_ledger(
         transactions = ledger.parse_transactions()
     except Exception as e:
         print(f"[ERROR] parse_transactions failed: {e}")
+
+    try:
+        ledger_document = ledger.parse_doc()
+    except Exception as e:
+        print(f"[ERROR] parse_doc failed: {e}")
 
     try:
         accounts = ledger.parse_accounts()
@@ -109,6 +115,7 @@ def parse_ledger(
 
     return (
         ledger,
+        ledger_document,
         transactions,
         accounts,
         accounts_advance,
@@ -130,7 +137,7 @@ def calculates_ledger(
     period = None
 
     try:
-        ledger, _, accounts, _, _, _, transactions_resolved = parse_ledger(
+        ledger, _, _, accounts, _, _, _, transactions_resolved = parse_ledger(
             file, file_accounts, opts
         )
     except Exception as e:
@@ -217,7 +224,7 @@ def analyze_ledger(
     months = []
 
     try:
-        _, _, accounts, _, _, parents, transactions_resolved = parse_ledger(
+        _, _, _, accounts, _, _, parents, transactions_resolved = parse_ledger(
             file, file_accounts, opts
         )
     except Exception as e:
@@ -327,7 +334,7 @@ def analyze_ledger_compare(
 ):
     """Analiza un archivo de ledger"""
 
-    _, _, accounts, _, _, _, transactions_resolved = parse_ledger(
+    _, _, _, accounts, _, _, _, transactions_resolved = parse_ledger(
         file, file_accounts, opts
     )
 
@@ -349,7 +356,7 @@ def analyze_ledger_alerts(
 ):
     """Analiza un archivo de ledger"""
 
-    _, _, accounts, _, _, _, transactions_resolved = parse_ledger(
+    _, _, _, accounts, _, _, _, transactions_resolved = parse_ledger(
         file, file_accounts, opts
     )
 
