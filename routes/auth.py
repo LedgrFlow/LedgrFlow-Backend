@@ -4,6 +4,7 @@ from extensions import db
 from models.user import User
 from schemas.user_schema import UserCreateSchema, UserLoginSchema, UserResponseSchema
 from marshmallow import ValidationError
+import traceback
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -67,36 +68,25 @@ def register():
 
 @auth_bp.route('/login', methods=['POST'])
 def login():
-    """Iniciar sesión con email y contraseña"""
     try:
-        # Validar datos de entrada
         data = user_login_schema.load(request.json)
-        
-        # Buscar usuario por email
         user = User.query.filter_by(email=data['email']).first()
-        
         if not user:
             return jsonify({'error': 'Credenciales inválidas'}), 401
-        
-        # Verificar contraseña
         if not user.check_password(data['password']):
             return jsonify({'error': 'Credenciales inválidas'}), 401
-        
-        # Generar token JWT
         access_token = create_access_token(identity=str(user.id))
         refresh_token = create_refresh_token(identity=str(user.id))
-        
         return jsonify({
             'message': 'Login exitoso',
             'user': user_response_schema.dump(user),
             'access_token': access_token,
             'refresh_token': refresh_token
         }), 200
-        
     except ValidationError as e:
         return jsonify({'error': 'Datos inválidos', 'details': e.messages}), 400
     except Exception as e:
-        print(e)
+        traceback.print_exc()  # <-- Esto imprime el stacktrace completo
         return jsonify({'error': 'Error interno del servidor'}), 500
 
 @auth_bp.route('/validate-token', methods=['GET'])
