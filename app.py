@@ -3,8 +3,6 @@ from flask_cors import CORS
 from config import Config
 from extensions import db, migrate, jwt
 from datetime import timedelta
-from flask_migrate import upgrade
-
 
 def create_app(config_class=Config):
     """Factory function to create Flask application"""
@@ -25,9 +23,6 @@ def create_app(config_class=Config):
         CORS(app)
     else:
         CORS(app, resources={r"/*": {"origins": app.config["CORS_ORIGINS"]}})
-        
-    with app.app_context():
-        upgrade()
 
     # Register blueprints
     from routes.main import main_bp
